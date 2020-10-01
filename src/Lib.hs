@@ -34,3 +34,23 @@ getAdjacentUnknowns = getAdjacentsOf Unknown
 
 getAdjacentMines :: Point -> Board -> [Tile]
 getAdjacentMines p board = filter isMine $ getAdjacents p board
+
+-- functions for checking what actions are valid for a given tile on the board
+
+isExpandable :: Point -> Board -> Bool
+isExpandable p board = length flags == length mines
+    where
+        flags = getAdjacentFlags p board
+        mines = getAdjacentMines p board
+
+isFlaggable :: Point -> Board -> Bool
+isFlaggable p board = length (unknowns ++ flags) == length mines
+    where
+        unknowns = getAdjacentUnknowns p board
+        flags = getAdjacentFlags p board
+        mines = getAdjacentMines p board
+
+isCompleted :: Point -> Board -> Bool       
+isCompleted p board = length unknowns == 0
+    where
+        unknowns = getAdjacentUnknowns p board
